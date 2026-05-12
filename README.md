@@ -8,7 +8,9 @@
 [![JWT](https://img.shields.io/badge/Auth-JWT-orange)]()
 [![Groq AI](https://img.shields.io/badge/AI-Groq-purple)]()
 
+
 ---
+
 
 ## 🌐 Live Demo
 
@@ -18,7 +20,9 @@
 [URL](https://resume-analyzer-frontend-a7ud.onrender.com)
 ```
 
+
 ---
+
 
 ## 📌 Project Overview
 
@@ -26,7 +30,9 @@ AI Resume Analyzer is a modern full-stack SaaS-style web application that helps 
 
 The platform allows users to upload resumes, receive intelligent feedback, detect missing keywords, and improve resume quality for better recruiter visibility.
 
+
 ---
+
 
 ## ✨ Core Features
 
@@ -40,7 +46,9 @@ The platform allows users to upload resumes, receive intelligent feedback, detec
 ✅ Responsive SaaS Interface   
 ✅ MERN Stack Architecture  
 
+
 ---
+
 
 ## 🧠 AI Analysis Includes
 
@@ -50,7 +58,9 @@ The platform allows users to upload resumes, receive intelligent feedback, detec
 - Weaknesses Detection
 - Improvement Suggestions
 
+
 ---
+
 
 ## 🛠 Tech Stack
 
@@ -71,7 +81,9 @@ The platform allows users to upload resumes, receive intelligent feedback, detec
 ### AI
 - Groq AI API
 
+
 ---
+
 
 # 📸 Application Preview
 
@@ -87,7 +99,9 @@ Drag-and-drop resume upload experience.
 ## 🤖 AI ATS Analysis
 Detailed AI-generated ATS evaluation cards.
 
+
 ---
+
 
 ## 🔐 Authentication Features
 
@@ -96,7 +110,9 @@ Detailed AI-generated ATS evaluation cards.
 - Protected Routes
 - Persistent Sessions
 
+
 ---
+
 
 ## 📂 Project Structure
 
@@ -108,7 +124,9 @@ Resume-Analyzer
 └── README.md
 ```
 
+
 ---
+
 
 # ⚙️ Local Setup
 
@@ -118,7 +136,9 @@ Resume-Analyzer
 git clone https://github.com/jeba57/Resume-Analyzer.git
 ```
 
+
 ---
+
 
 ## 2️⃣ Backend Setup
 
@@ -128,7 +148,9 @@ npm install
 npm run dev
 ```
 
+
 ---
+
 
 ## 3️⃣ Frontend Setup
 
@@ -138,7 +160,9 @@ npm install
 npm run dev
 ```
 
+
 ---
+
 
 # 🔑 Environment Variables
 
@@ -150,7 +174,9 @@ JWT_SECRET=your_jwt_secret
 GROQ_API_KEY=your_groq_api_key
 ```
 
+
 ---
+
 
 # 🚀 Upcoming Features
 
@@ -161,7 +187,9 @@ GROQ_API_KEY=your_groq_api_key
 - Email Notifications
 - Advanced Analytics
 
+
 ---
+
 
 # 💼 Why This Project Stands Out
 
@@ -176,7 +204,9 @@ This project demonstrates:
 ✔ Modern Responsive Frontend  
 ✔ Real-world Product Thinking  
 
+
 ---
+
 
 # 👨‍💻 Developer
 
@@ -185,7 +215,9 @@ This project demonstrates:
 GitHub:  
 https://github.com/jeba57
 
+
 ---
+
 
 # ⭐ Support
 
