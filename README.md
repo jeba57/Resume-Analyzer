@@ -12,11 +12,8 @@
 
 ## 🌐 Live Demo
 
-🚀 Live Application:  
-(Add your deployed link here)
-
 ```bash
-https://your-live-demo-link.com
+ongoing
 ```
 
 ---
