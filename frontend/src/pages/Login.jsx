@@ -13,7 +13,7 @@ function Login() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://resume-analyzer-8to7.onrender.com/api/auth/login",
         {
           email,
           password,

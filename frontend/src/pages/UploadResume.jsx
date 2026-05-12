@@ -60,16 +60,15 @@ function UploadResume() {
       );
 
       const { data } = await axios.post(
-        "http://127.0.0.1:5000/api/resume/upload",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${userInfo.token}`,
-            "Content-Type":
-              "multipart/form-data",
-          },
-        }
-      );
+  "https://resume-analyzer-8to7.onrender.com/api/resume/upload",
+  formData,
+  {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  }
+);
 
       setAnalysis(data.analysis);
 
