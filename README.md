@@ -12,8 +12,10 @@
 
 ## 🌐 Live Demo
 
+🚀 Live Application:  ([click here](https://resume-analyzer-frontend-a7ud.onrender.com))
+
 ```bash
-ongoing
+[URL](https://resume-analyzer-frontend-a7ud.onrender.com)
 ```
 
 ---
