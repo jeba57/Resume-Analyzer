@@ -2,12 +2,12 @@
 
 > Modern AI-powered ATS Resume Analyzer built with MERN Stack and Groq AI.
 
-[![React](https://img.shields.io/badge/React-Frontend-blue)]()
-[![Node.js](https://img.shields.io/badge/Node.js-Backend-green)]()
-[![MongoDB](https://img.shields.io/badge/MongoDB-Database-darkgreen)]()
+[![React](https://img.shields.io/badge/Frontend-React-blue)]()
+[![Node.js](https://img.shields.io/badge/Backend-Node.js-green)]()
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB-darkgreen)]()
 [![JWT](https://img.shields.io/badge/Auth-JWT-orange)]()
-[![Groq AI](https://img.shields.io/badge/AI-Groq-purple)]()
-
+[![Groq](https://img.shields.io/badge/AI-Groq-purple)]()
+[![MERN](https://img.shields.io/badge/Stack-MERN-black)]()
 
 ---
 
