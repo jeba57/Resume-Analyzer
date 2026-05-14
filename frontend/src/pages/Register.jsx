@@ -1,7 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 function Register() {
+  const navigate = useNavigate();
   const [name, setName] =
     useState("");
 
@@ -15,7 +18,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post(
+      await axios.post(
         "https://resume-analyzer-8to7.onrender.com/api/auth/register",
         {
           name,
@@ -24,12 +27,11 @@ function Register() {
         }
       );
 
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify(data)
-      );
+      alert(
+  "Registration Successful ✅ Please Login"
+);
 
-      alert("Registration Successful ✅");
+navigate("/login");
     } catch (error) {
       alert(
         error.response?.data?.message ||

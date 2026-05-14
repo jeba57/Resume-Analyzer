@@ -1,7 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] =
     useState("");
 
@@ -23,9 +25,10 @@ function Login() {
       localStorage.setItem(
         "userInfo",
         JSON.stringify(data)
+        
       );
-
       alert("Login Successful ✅");
+      navigate("/");
     } catch (error) {
       alert(
         error.response?.data?.message ||

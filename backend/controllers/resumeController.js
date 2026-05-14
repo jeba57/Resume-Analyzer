@@ -1,26 +1,49 @@
 import extractTextFromPDF from "../services/pdfService.js";
-
 import analyzeResumeWithAI from "../services/geminiService.js";
 
-export const uploadResume = async (req, res) => {
+const uploadResume = async (req, res) => {
+
   try {
-    const filePath = req.file.path;
 
-    const extractedText =
-      await extractTextFromPDF(filePath);
+    if (!req.file) {
 
-    const analysis =
+      return res.status(400).json({
+        message: "No file uploaded",
+      });
+
+    }
+
+    const resumeText =
+      await extractTextFromPDF(
+        req.file.path
+      );
+
+    const jobDescription =
+  req.body.jobDescription || "";
+
+const analysis =
   await analyzeResumeWithAI(
-    extractedText
+    resumeText,
+    jobDescription
   );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       analysis,
     });
+
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+
+    console.log(error);
+
+    return res.status(500).json({
+      message:
+        "Resume analysis failed",
     });
+
   }
+};
+
+export {
+  uploadResume,
 };
