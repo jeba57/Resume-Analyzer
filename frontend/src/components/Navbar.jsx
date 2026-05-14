@@ -7,7 +7,7 @@ function Navbar() {
         Resume Analyzer
       </h1>
 
-      <div className="flex gap-6 text-lg">
+      <div className="flex gap-7 text-lg">
         <Link
           to="/"
           className="hover:text-blue-600 transition"
@@ -24,7 +24,7 @@ function Navbar() {
 
         <Link
           to="/register"
-          className="hover:text-blue-600 transition"
+          className="hover:text-blue-700 transition"
         >
           Register
         </Link>
