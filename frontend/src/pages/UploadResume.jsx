@@ -1,431 +1,176 @@
 import { useState } from "react";
-
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-import ATSScoreCard from "../components/ATSScoreCard";
-import ATSBreakdown from "../components/ATSBreakdown";
-import StrengthList from "../components/StrengthList";
-import WeaknessList from "../components/WeaknessList";
-import SuggestionPanel from "../components/SuggestionPanel";
-import KeywordMatch from "../components/KeywordMatch";
-import RecruiterVerdict from "../components/RecruiterVerdict";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function UploadResume() {
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [jobDescription, setJobDescription] = useState("");
+  const [error, setError] = useState("");
+  const [dragOver, setDragOver] = useState(false);
+  const navigate = useNavigate();
 
-  const [file, setFile] =
-    useState(null);
+  const loadingSteps = [
+    "Parsing resume structure…",
+    "Evaluating ATS keyword density…",
+    "Simulating recruiter review…",
+    "Detecting formatting risks…",
+    "Generating optimized rewrites…",
+    "Computing final ATS score…",
+  ];
+  const [loadingStep, setLoadingStep] = useState(0);
 
-  const [loading, setLoading] =
-    useState(false);
-
-  const [analysis, setAnalysis] =
-    useState(null);
-
-  const [jobDescription,
-    setJobDescription] =
-    useState("");
-
-  const handleUpload = async (
-    e
-  ) => {
-
+  const handleDrop = (e) => {
     e.preventDefault();
-
-    if (!file) {
-
-      return alert(
-        "Please upload a PDF resume"
-      );
+    setDragOver(false);
+    const dropped = e.dataTransfer.files[0];
+    if (dropped && dropped.type === "application/pdf") {
+      setFile(dropped);
+      setError("");
+    } else {
+      setError("Please upload a PDF file.");
     }
+  };
+
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0];
+    if (selected) {
+      setFile(selected);
+      setError("");
+    }
+  };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (!file) { setError("Please upload a PDF resume."); return; }
+
+    setError("");
+    setLoading(true);
+    setLoadingStep(0);
+
+    const interval = setInterval(() => {
+      setLoadingStep((prev) => (prev + 1) % loadingSteps.length);
+    }, 1800);
 
     try {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const formData = new FormData();
+      formData.append("resume", file);
+      formData.append("jobDescription", jobDescription);
 
-      setLoading(true);
-
-      const formData =
-        new FormData();
-
-      formData.append(
-        "resume",
-        file
+      const response = await axios.post(
+        `${API_BASE}/api/resume/upload`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo?.token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
-      formData.append(
-        "jobDescription",
-        jobDescription
-      );
-
-      const userInfo = JSON.parse(
-  localStorage.getItem(
-    "userInfo"
-  )
-);
-
-const response =
-  await axios.post(
-
-    "http://localhost:5000/api/resume/upload",
-
-    formData,
-
-    {
-      headers: {
-
-        Authorization:
-          `Bearer ${userInfo?.token}`,
-
-        "Content-Type":
-          "multipart/form-data",
-      },
-    }
-  );
-
-      console.log(
-        "UPLOAD RESPONSE:",
-        response.data
-      );
-
-      const analysisData =
-        response.data.analysis ||
-        response.data;
-
-      setAnalysis(
-        analysisData
-      );
-
+      clearInterval(interval);
+      const analysisData = response.data.analysis || response.data;
+      navigate("/result", { state: { analysis: analysisData } });
+    } catch (err) {
+      clearInterval(interval);
       setLoading(false);
-
-    } catch (error) {
-
-      console.log(error);
-
-      setLoading(false);
-
-      alert(
-        error.response?.data
-          ?.message ||
-        "Resume upload failed"
-      );
+      setError(err.response?.data?.message || "Resume analysis failed. Please try again.");
     }
   };
 
   return (
-
-    <div className="min-h-screen bg-gray-100 py-14 px-6">
-
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-3xl mx-auto">
 
         {/* HEADER */}
-
-        <div className="text-center mb-14">
-
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-
-            Upload Your Resume
-
-          </h1>
-
-          <p className="text-xl text-gray-600">
-
-            Recruiter-grade AI resume intelligence platform
-
-          </p>
-
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Resume Intelligence</h1>
+          <p className="text-gray-500">Upload your resume for a recruiter-grade ATS analysis</p>
         </div>
 
-        {/* UPLOAD SECTION */}
-
-        <div className="bg-white rounded-3xl shadow-xl p-10 mb-14 border border-gray-100">
-
-          <form
-            onSubmit={handleUpload}
-            className="space-y-8"
-          >
-
-            {/* FILE UPLOAD */}
-
-            <div>
-
-              <label className="block text-xl font-semibold text-gray-800 mb-4">
-
-                📄 Upload Resume PDF
-
-              </label>
-
-              <div className="border-2 border-dashed border-blue-300 rounded-3xl p-10 text-center bg-blue-50 hover:bg-blue-100 transition">
-
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) =>
-                    setFile(
-                      e.target.files[0]
-                    )
-                  }
-                  className="hidden"
-                  id="resumeUpload"
-                />
-
-                <label
-                  htmlFor="resumeUpload"
-                  className="cursor-pointer"
-                >
-
-                  <div className="text-6xl mb-4">
-
-                    📄
-
-                  </div>
-
-                  <p className="text-xl font-semibold text-gray-700 mb-2">
-
-                    Drag & Drop Resume
-
-                  </p>
-
-                  <p className="text-gray-500 mb-6">
-
-                    Upload your PDF resume
-
-                  </p>
-
-                  <span className="bg-blue-600 text-white px-6 py-3 rounded-2xl text-lg hover:bg-blue-700 transition">
-
-                    Browse File
-
-                  </span>
-
-                </label>
-
-              </div>
-
-              {file && (
-
-                <p className="mt-4 text-green-600 font-medium">
-
-                  Selected:
-                  {" "}
-                  {file.name}
-
-                </p>
-
-              )}
-
-            </div>
-
-            {/* JOB DESCRIPTION */}
-
-            <div>
-
-              <label className="block text-xl font-semibold text-gray-800 mb-4">
-
-                🎯 Target Job Description
-
-              </label>
-
-              <textarea
-                placeholder="Paste the job description you are applying for..."
-                value={jobDescription}
-                onChange={(e) =>
-                  setJobDescription(
-                    e.target.value
-                  )
-                }
-                className="w-full h-44 border border-gray-200 rounded-3xl p-5 outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
-
-            </div>
-
-            {/* BUTTON */}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl text-xl font-semibold transition"
-            >
-
-              {loading
-                ? "Analyzing Resume..."
-                : "Generate ATS Intelligence Report"}
-
-            </button>
-
-          </form>
-
-        </div>
-
-        {/* ANALYSIS SECTION */}
-
-        {analysis && (
-
-          <div className="space-y-10">
-
-            {/* SCORE CARDS */}
-
-            <div className="grid md:grid-cols-4 gap-6">
-
-              <ATSScoreCard
-                title="ATS Score"
-                score={
-                  analysis.atsScore
-                }
-              />
-
-              <ATSScoreCard
-                title="Keyword Match"
-                score={
-                  analysis.keywordMatch
-                }
-              />
-
-              <ATSScoreCard
-                title="Recruiter Confidence"
-                score={
-                  analysis.recruiterConfidence
-                }
-              />
-
-              <ATSScoreCard
-                title="Technical Score"
-                score={
-                  analysis.technicalScore
-                }
-              />
-
-            </div>
-
-            {/* BREAKDOWN */}
-
-            <ATSBreakdown
-              atsScore={
-                analysis.atsScore
-              }
-              keywordMatch={
-                analysis.keywordMatch
-              }
-            />
-
-            {/* STRENGTHS + WEAKNESSES */}
-
-            <div className="grid md:grid-cols-2 gap-8">
-
-              <StrengthList
-                strengths={
-                  analysis.strengths
-                }
-              />
-
-              <WeaknessList
-                weaknesses={
-                  analysis.weaknesses
-                }
-              />
-
-            </div>
-
-            {/* KEYWORD MATCH */}
-
-            <KeywordMatch
-              keywordMatch={
-                analysis.keywordMatch
-              }
-              missingKeywords={
-                analysis.missingKeywords
-              }
-            />
-
-            {/* MATCHED + MISSING */}
-
-            <div className="grid md:grid-cols-2 gap-8">
-
-              <div className="bg-white p-8 rounded-3xl shadow border border-gray-100">
-
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
-
-                  Matched Skills
-
-                </h2>
-
-                <div className="flex flex-wrap gap-3">
-
-                  {analysis?.matchedSkills?.map(
-                    (
-                      skill,
-                      index
-                    ) => (
-
-                      <span
-                        key={index}
-                        className="bg-green-100 text-green-700 px-5 py-2 rounded-full font-medium"
-                      >
-
-                        {skill}
-
-                      </span>
-                    )
-                  )}
-
-                </div>
-
-              </div>
-
-              <div className="bg-white p-8 rounded-3xl shadow border border-gray-100">
-
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
-
-                  Missing Critical Skills
-
-                </h2>
-
-                <div className="flex flex-wrap gap-3">
-
-                  {analysis?.missingCriticalSkills?.map(
-                    (
-                      skill,
-                      index
-                    ) => (
-
-                      <span
-                        key={index}
-                        className="bg-red-100 text-red-600 px-5 py-2 rounded-full font-medium"
-                      >
-
-                        {skill}
-
-                      </span>
-                    )
-                  )}
-
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* SUGGESTIONS */}
-
-            <SuggestionPanel
-              suggestions={
-                analysis.suggestions
-              }
-              improvedBulletPoints={
-                analysis.improvedBulletPoints
-              }
-            />
-
-            {/* VERDICT */}
-
-            <RecruiterVerdict
-              verdict={
-                analysis.recruiterVerdict
-              }
-            />
-
+        {/* LOADING STATE */}
+        {loading && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center mb-6">
+            <div className="w-14 h-14 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin mx-auto mb-5" />
+            <p className="text-gray-700 font-medium text-lg mb-1">Analyzing your resume</p>
+            <p className="text-gray-400 text-sm">{loadingSteps[loadingStep]}</p>
           </div>
         )}
 
-      </div>
+        {/* UPLOAD FORM */}
+        {!loading && (
+          <form onSubmit={handleUpload} className="space-y-5">
 
+            {/* DROP ZONE */}
+            <div
+              className={`bg-white rounded-2xl border-2 border-dashed transition-all duration-200 p-10 text-center cursor-pointer
+                ${dragOver ? "border-blue-400 bg-blue-50" : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"}`}
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById("resumeFile").click()}
+            >
+              <input
+                type="file"
+                id="resumeFile"
+                accept=".pdf"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <div className="text-4xl mb-3">📄</div>
+              {file ? (
+                <>
+                  <p className="text-green-600 font-semibold text-base">{file.name}</p>
+                  <p className="text-gray-400 text-sm mt-1">{(file.size / 1024).toFixed(1)} KB · Click to change</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-gray-700 font-semibold text-base mb-1">Drop your resume here</p>
+                  <p className="text-gray-400 text-sm">PDF format · Click to browse</p>
+                </>
+              )}
+            </div>
+
+            {/* JOB DESCRIPTION */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Target Job Description
+                <span className="ml-2 text-xs text-gray-400 font-normal">Optional — improves keyword accuracy</span>
+              </label>
+              <textarea
+                placeholder="Paste the job description you are applying for. The AI will match keywords, required skills, and role expectations against your resume…"
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                rows={5}
+                className="w-full border border-gray-200 rounded-xl p-4 text-sm text-gray-700 resize-none outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              />
+            </div>
+
+            {/* ERROR */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
+                {error}
+              </div>
+            )}
+
+            {/* SUBMIT */}
+            <button
+              type="submit"
+              disabled={!file || loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white py-4 rounded-2xl text-base font-semibold transition-all duration-200 hover:shadow-lg"
+            >
+              Generate ATS Intelligence Report
+            </button>
+
+            <p className="text-center text-xs text-gray-400">
+              Your resume is analyzed securely and never stored permanently.
+            </p>
+          </form>
+        )}
+      </div>
     </div>
   );
 }

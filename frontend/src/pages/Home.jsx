@@ -1,245 +1,178 @@
 import { Link } from "react-router-dom";
 
+const features = [
+  {
+    icon: "🎯",
+    title: "Realistic ATS Scoring",
+    desc: "Score your resume across keyword density, formatting, readability, and technical depth — just like Jobscan and Resume Worded.",
+  },
+  {
+    icon: "🔍",
+    title: "Keyword Gap Analysis",
+    desc: "See exactly which keywords are matched, which are missing, and which critical skills recruiters are looking for.",
+  },
+  {
+    icon: "✏️",
+    title: "AI Bullet Rewrites",
+    desc: "Every weak bullet point is automatically rewritten with stronger action verbs, quantified impact, and ATS-friendly language.",
+  },
+  {
+    icon: "👤",
+    title: "Recruiter Simulation",
+    desc: "Understand whether a recruiter would shortlist your resume — and exactly why or why not.",
+  },
+  {
+    icon: "⚠️",
+    title: "Formatting Risk Detection",
+    desc: "Identify tables, columns, headers, and structures that confuse ATS parsers before they cost you the interview.",
+  },
+  {
+    icon: "💡",
+    title: "Actionable Improvements",
+    desc: "Every suggestion explains WHY it matters for ATS parsing, recruiter readability, and your hiring success.",
+  },
+];
+
+const steps = [
+  { step: "01", title: "Upload Resume", desc: "Upload your resume PDF and optionally paste the job description for precision matching." },
+  { step: "02", title: "AI Analysis", desc: "Our AI analyzes your resume across 6 dimensions with recruiter-grade intelligence." },
+  { step: "03", title: "Get Your Report", desc: "Receive a full ATS score, keyword gaps, rewritten bullets, and recruiter simulation." },
+];
+
 function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
 
-      {/* HERO SECTION */}
-      <div className="max-w-6xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-12 items-center">
-
-        {/* LEFT */}
+      {/* HERO */}
+      <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-16 items-center">
         <div>
-          <p className="text-blue-500 font-semibold mb-4">
-            AI Powered Resume Analysis
-          </p>
-
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
-            Improve Your Resume With AI
+          <span className="inline-block text-xs font-semibold uppercase tracking-widest text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full mb-5">
+            Powered by Gemini AI
+          </span>
+          <h1 className="text-5xl font-bold text-gray-900 leading-tight mb-5">
+            Get your resume<br />
+            <span className="text-blue-600">ATS-ready</span> in minutes
           </h1>
-
-          <p className="text-gray-600 text-lg leading-8 mb-8">
-            Upload your resume and get ATS
-            score analysis, missing keywords,
-            strengths, weaknesses, and recruiter-friendly suggestions instantly.
+          <p className="text-gray-500 text-lg leading-relaxed mb-8">
+            Upload your resume and receive a recruiter-grade analysis — ATS score, keyword gaps, formatting risks, and AI-optimized rewrites instantly.
           </p>
-
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-3">
             <Link
               to="/upload"
-              className="bg-blue-500 text-white px-8 py-4 rounded-2xl hover:scale-105 hover:shadow-lg transition-all duration-300"
+              className="bg-blue-600 text-white px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
             >
-              Analyze Resume
+              Analyze My Resume
             </Link>
-
             <Link
               to="/register"
-              className="bg-white border border-gray-300 px-8 py-4 rounded-2xl hover:bg-gray-100 transition duration-300"
+              className="border border-gray-200 text-gray-700 px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition duration-200"
             >
-              Get Started
+              Create Free Account
             </Link>
           </div>
+          <p className="text-xs text-gray-400 mt-4">No credit card required · Results in under 30 seconds</p>
         </div>
 
-        {/* RIGHT CARD */}
-        <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100 hover:-translate-y-1 hover:shadow-xl transition duration-300">
-
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">
-              ATS Analysis
-            </h2>
-
-            <span className="bg-green-100 text-green-600 px-4 py-2 rounded-xl font-semibold">
-              8.5/10
-            </span>
+        {/* HERO PREVIEW CARD */}
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-7 space-y-4">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-sm font-semibold text-gray-700">ATS Analysis Report</span>
+            <span className="text-xs text-gray-400">Sample output</span>
           </div>
 
-          <div className="space-y-4">
-
-            <div className="bg-blue-50 p-4 rounded-2xl">
-              <h3 className="font-semibold text-blue-600 mb-2">
-                Strengths
-              </h3>
-
-              <p className="text-gray-600 text-sm">
-                Strong MERN stack skills,
-                authentication, REST APIs,
-                MongoDB integration.
-              </p>
+          <div className="flex items-center gap-4 bg-gray-50 rounded-xl p-4 border border-gray-100">
+            <div className="relative w-14 h-14 shrink-0">
+              <svg width="56" height="56" style={{ transform: "rotate(-90deg)" }}>
+                <circle cx="28" cy="28" r="22" fill="none" stroke="#e5e7eb" strokeWidth="5" />
+                <circle cx="28" cy="28" r="22" fill="none" stroke="#16a34a" strokeWidth="5"
+                  strokeDasharray="138.2" strokeDashoffset="41.5" strokeLinecap="round" />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-sm font-bold text-green-600">72%</span>
+              </div>
             </div>
-
-            <div className="bg-yellow-50 p-4 rounded-2xl">
-              <h3 className="font-semibold text-yellow-600 mb-2">
-                Missing Skills
-              </h3>
-
-              <p className="text-gray-600 text-sm">
-                AWS, Docker, Kubernetes,
-                CI/CD pipelines.
-              </p>
+            <div>
+              <p className="text-sm font-semibold text-gray-800">Good ATS Compatibility</p>
+              <p className="text-xs text-gray-500 mt-0.5">Strong technical foundation — missing cloud & DevOps keywords</p>
             </div>
-
-            <div className="bg-green-50 p-4 rounded-2xl">
-              <h3 className="font-semibold text-green-600 mb-2">
-                Suggestions
-              </h3>
-
-              <p className="text-gray-600 text-sm">
-                Add cloud deployment
-                projects and DevOps tools.
-              </p>
-            </div>
-
           </div>
-        </div>
 
-      </div>
-
-      {/* FEATURES SECTION */}
-      <div className="max-w-6xl mx-auto px-6 py-20">
-
-        <div className="text-center mb-14">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Powerful AI Features
-          </h2>
-
-          <p className="text-gray-600 text-lg">
-            Everything you need to improve your resume.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-
-          <div className="bg-white p-8 rounded-3xl shadow hover:-translate-y-2 hover:shadow-2xl transition duration-300">
-            <div className="text-5xl mb-4">
-              🤖
+          <div>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Matched Keywords</p>
+            <div className="flex flex-wrap gap-1.5">
+              {["React.js", "Node.js", "MongoDB", "REST APIs", "JWT"].map(k => (
+                <span key={k} className="text-xs bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 rounded-full">{k}</span>
+              ))}
             </div>
+          </div>
 
-            <h3 className="text-2xl font-semibold mb-3">
-              AI Analysis
-            </h3>
+          <div>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Missing Keywords</p>
+            <div className="flex flex-wrap gap-1.5">
+              {["Docker", "AWS", "CI/CD", "Kubernetes"].map(k => (
+                <span key={k} className="text-xs bg-red-50 text-red-600 border border-red-200 px-2.5 py-1 rounded-full">{k}</span>
+              ))}
+            </div>
+          </div>
 
-            <p className="text-gray-600 leading-7">
-              Analyze resumes using AI-powered ATS scoring and smart recommendations.
+          <div className="bg-amber-50 border border-amber-100 rounded-xl p-3">
+            <p className="text-xs text-amber-700">
+              <strong>Recruiter note:</strong> Strong MERN skills, but cloud experience gaps may filter this resume in senior roles. Add AWS or GCP project experience.
             </p>
           </div>
-
-          <div className="bg-white p-8 rounded-3xl shadow hover:-translate-y-2 hover:shadow-2xl transition duration-300">
-            <div className="text-5xl mb-4">
-              📄
-            </div>
-
-            <h3 className="text-2xl font-semibold mb-3">
-              Resume Parsing
-            </h3>
-
-            <p className="text-gray-600 leading-7">
-              Extract resume content automatically using PDF parsing technology.
-            </p>
-          </div>
-
-          <div className="bg-white p-8 rounded-3xl shadow hover:-translate-y-2 hover:shadow-2xl transition duration-300">
-            <div className="text-5xl mb-4">
-              📊
-            </div>
-
-            <h3 className="text-2xl font-semibold mb-3">
-              ATS Score
-            </h3>
-
-            <p className="text-gray-600 leading-7">
-              Get recruiter-friendly ATS score and missing keyword suggestions.
-            </p>
-          </div>
-
         </div>
       </div>
 
       {/* HOW IT WORKS */}
-      <div className="bg-white py-20">
-
-        <div className="max-w-6xl mx-auto px-6">
-
-          <div className="text-center mb-14">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              How It Works
-            </h2>
-
-            <p className="text-gray-600 text-lg">
-              Simple 3-step workflow.
-            </p>
+      <div className="bg-gray-50 py-20 border-y border-gray-100">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">How it works</h2>
+            <p className="text-gray-500">Professional ATS intelligence in 3 steps</p>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-
-            <div>
-              <div className="w-20 h-20 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
-                1
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((s) => (
+              <div key={s.step} className="bg-white rounded-2xl border border-gray-100 p-7 shadow-sm">
+                <span className="text-3xl font-black text-blue-100">{s.step}</span>
+                <h3 className="text-base font-bold text-gray-900 mt-2 mb-2">{s.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
               </div>
-
-              <h3 className="text-2xl font-semibold mb-3">
-                Upload Resume
-              </h3>
-
-              <p className="text-gray-600">
-                Upload your resume securely in PDF format.
-              </p>
-            </div>
-
-            <div>
-              <div className="w-20 h-20 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
-                2
-              </div>
-
-              <h3 className="text-2xl font-semibold mb-3">
-                AI Processing
-              </h3>
-
-              <p className="text-gray-600">
-                Our AI analyzes ATS compatibility and resume quality.
-              </p>
-            </div>
-
-            <div>
-              <div className="w-20 h-20 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
-                3
-              </div>
-
-              <h3 className="text-2xl font-semibold mb-3">
-                Get Insights
-              </h3>
-
-              <p className="text-gray-600">
-                Receive scores, missing keywords, and improvements instantly.
-              </p>
-            </div>
-
+            ))}
           </div>
-
         </div>
       </div>
 
-      {/* CTA SECTION */}
-      <div className="py-24 px-6">
+      {/* FEATURES */}
+      <div className="py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Everything you need</h2>
+            <p className="text-gray-500">Recruiter-grade analysis across every dimension of your resume</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {features.map((f) => (
+              <div key={f.title} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                <div className="text-2xl mb-3">{f.icon}</div>
+                <h3 className="text-sm font-bold text-gray-900 mb-2">{f.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-        <div className="max-w-4xl mx-auto bg-blue-500 rounded-3xl p-12 text-center text-white shadow-2xl">
-
-          <h2 className="text-4xl font-bold mb-6">
-            Ready To Improve Your Resume?
-          </h2>
-
-          <p className="text-lg mb-8 text-blue-100">
-            Start analyzing your resume with AI today.
-          </p>
-
+      {/* CTA */}
+      <div className="py-20 px-6">
+        <div className="max-w-3xl mx-auto bg-blue-600 rounded-3xl p-12 text-center text-white">
+          <h2 className="text-3xl font-bold mb-3">Ready to optimize your resume?</h2>
+          <p className="text-blue-100 text-base mb-7">Get your ATS score, keyword analysis, and AI-powered improvements in under 30 seconds.</p>
           <Link
             to="/upload"
-            className="bg-white text-blue-500 px-8 py-4 rounded-2xl font-semibold hover:scale-105 hover:shadow-xl transition-all duration-300 inline-block"
+            className="bg-white text-blue-600 px-8 py-3.5 rounded-xl font-semibold text-sm hover:shadow-xl hover:scale-105 transition-all duration-200 inline-block"
           >
-            Analyze Now
+            Analyze My Resume Free
           </Link>
-
         </div>
-
       </div>
 
     </div>
