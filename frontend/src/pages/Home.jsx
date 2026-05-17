@@ -1,42 +1,18 @@
 import { Link } from "react-router-dom";
 
 const features = [
-  {
-    icon: "🎯",
-    title: "Realistic ATS Scoring",
-    desc: "Score your resume across keyword density, formatting, readability, and technical depth — just like Jobscan and Resume Worded.",
-  },
-  {
-    icon: "🔍",
-    title: "Keyword Gap Analysis",
-    desc: "See exactly which keywords are matched, which are missing, and which critical skills recruiters are looking for.",
-  },
-  {
-    icon: "✏️",
-    title: "AI Bullet Rewrites",
-    desc: "Every weak bullet point is automatically rewritten with stronger action verbs, quantified impact, and ATS-friendly language.",
-  },
-  {
-    icon: "👤",
-    title: "Recruiter Simulation",
-    desc: "Understand whether a recruiter would shortlist your resume — and exactly why or why not.",
-  },
-  {
-    icon: "⚠️",
-    title: "Formatting Risk Detection",
-    desc: "Identify tables, columns, headers, and structures that confuse ATS parsers before they cost you the interview.",
-  },
-  {
-    icon: "💡",
-    title: "Actionable Improvements",
-    desc: "Every suggestion explains WHY it matters for ATS parsing, recruiter readability, and your hiring success.",
-  },
+  { icon: "🎯", title: "Realistic ATS Scoring", desc: "Score across keyword density, formatting, readability, and technical depth — just like Jobscan and Resume Worded. No inflated numbers." },
+  { icon: "🔍", title: "Keyword Gap Analysis",  desc: "See exactly which keywords are matched, which are missing, and which critical skills recruiters are looking for in your target role." },
+  { icon: "✏️", title: "AI Bullet Rewrites",   desc: "Weak bullet points are automatically rewritten with stronger action verbs, quantified impact, and ATS-friendly language with before/after comparison." },
+  { icon: "👤", title: "Recruiter Simulation",  desc: "Understand whether a senior recruiter would shortlist your resume — and exactly why or why not, in plain language." },
+  { icon: "⚠️", title: "Formatting Risk Detection", desc: "Identify tables, columns, and structures that confuse ATS parsers before they silently filter out your application." },
+  { icon: "💡", title: "Actionable Improvements", desc: "Every suggestion explains WHY it matters for ATS parsing, recruiter readability, and your chances of landing an interview." },
 ];
 
 const steps = [
-  { step: "01", title: "Upload Resume", desc: "Upload your resume PDF and optionally paste the job description for precision matching." },
-  { step: "02", title: "AI Analysis", desc: "Our AI analyzes your resume across 6 dimensions with recruiter-grade intelligence." },
-  { step: "03", title: "Get Your Report", desc: "Receive a full ATS score, keyword gaps, rewritten bullets, and recruiter simulation." },
+  { step: "01", title: "Upload Resume",  desc: "Upload your PDF resume and optionally paste the job description for precision keyword matching." },
+  { step: "02", title: "AI Analysis",    desc: "Our AI analyzes your resume across 6 dimensions with recruiter-grade intelligence in under 30 seconds." },
+  { step: "03", title: "Get Your Report", desc: "Receive a full ATS score, keyword gaps, rewritten bullets, and an honest recruiter simulation." },
 ];
 
 function Home() {
@@ -59,13 +35,13 @@ function Home() {
           <div className="flex flex-wrap gap-3">
             <Link
               to="/upload"
-              className="bg-blue-600 text-white px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
+              className="bg-blue-600 text-white px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-blue-700 hover:shadow-lg transition-all"
             >
               Analyze My Resume
             </Link>
             <Link
               to="/register"
-              className="border border-gray-200 text-gray-700 px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition duration-200"
+              className="border border-gray-200 text-gray-700 px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition"
             >
               Create Free Account
             </Link>
@@ -75,9 +51,9 @@ function Home() {
 
         {/* HERO PREVIEW CARD */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-7 space-y-4">
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-gray-700">ATS Analysis Report</span>
-            <span className="text-xs text-gray-400">Sample output</span>
+            <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">Sample output</span>
           </div>
 
           <div className="flex items-center gap-4 bg-gray-50 rounded-xl p-4 border border-gray-100">
@@ -88,19 +64,19 @@ function Home() {
                   strokeDasharray="138.2" strokeDashoffset="41.5" strokeLinecap="round" />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-sm font-bold text-green-600">72%</span>
+                <span className="text-sm font-bold text-green-600">70%</span>
               </div>
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-800">Good ATS Compatibility</p>
-              <p className="text-xs text-gray-500 mt-0.5">Strong technical foundation — missing cloud & DevOps keywords</p>
+              <p className="text-xs text-gray-500 mt-0.5">Strong MERN foundation — missing cloud & DevOps keywords</p>
             </div>
           </div>
 
           <div>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Matched Keywords</p>
             <div className="flex flex-wrap gap-1.5">
-              {["React.js", "Node.js", "MongoDB", "REST APIs", "JWT"].map(k => (
+              {["React.js", "Node.js", "MongoDB", "REST APIs", "JWT"].map((k) => (
                 <span key={k} className="text-xs bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 rounded-full">{k}</span>
               ))}
             </div>
@@ -109,15 +85,15 @@ function Home() {
           <div>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Missing Keywords</p>
             <div className="flex flex-wrap gap-1.5">
-              {["Docker", "AWS", "CI/CD", "Kubernetes"].map(k => (
+              {["Docker", "AWS", "CI/CD", "Kubernetes"].map((k) => (
                 <span key={k} className="text-xs bg-red-50 text-red-600 border border-red-200 px-2.5 py-1 rounded-full">{k}</span>
               ))}
             </div>
           </div>
 
           <div className="bg-amber-50 border border-amber-100 rounded-xl p-3">
-            <p className="text-xs text-amber-700">
-              <strong>Recruiter note:</strong> Strong MERN skills, but cloud experience gaps may filter this resume in senior roles. Add AWS or GCP project experience.
+            <p className="text-xs text-amber-700 leading-relaxed">
+              <strong>Recruiter note:</strong> Strong MERN profile, but cloud experience gaps may filter this resume for senior roles. Adding an AWS or GCP project would significantly raise the score.
             </p>
           </div>
         </div>
@@ -151,7 +127,10 @@ function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {features.map((f) => (
-              <div key={f.title} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+              <div
+                key={f.title}
+                className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+              >
                 <div className="text-2xl mb-3">{f.icon}</div>
                 <h3 className="text-sm font-bold text-gray-900 mb-2">{f.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
@@ -165,10 +144,12 @@ function Home() {
       <div className="py-20 px-6">
         <div className="max-w-3xl mx-auto bg-blue-600 rounded-3xl p-12 text-center text-white">
           <h2 className="text-3xl font-bold mb-3">Ready to optimize your resume?</h2>
-          <p className="text-blue-100 text-base mb-7">Get your ATS score, keyword analysis, and AI-powered improvements in under 30 seconds.</p>
+          <p className="text-blue-100 text-base mb-7">
+            Get your ATS score, keyword analysis, and AI-powered improvements in under 30 seconds.
+          </p>
           <Link
             to="/upload"
-            className="bg-white text-blue-600 px-8 py-3.5 rounded-xl font-semibold text-sm hover:shadow-xl hover:scale-105 transition-all duration-200 inline-block"
+            className="bg-white text-blue-600 px-8 py-3.5 rounded-xl font-semibold text-sm hover:shadow-xl hover:scale-105 transition-all inline-block"
           >
             Analyze My Resume Free
           </Link>

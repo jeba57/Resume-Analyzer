@@ -1,162 +1,56 @@
-import {
-  GoogleGenerativeAI,
-} from "@google/generative-ai";
-
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import atsPrompt from "../utils/atsPrompt.js";
 
-const genAI =
-  new GoogleGenerativeAI(
-    process.env.GEMINI_API_KEY
-  );
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const analyzeResumeWithAI =
-  async (
-    resumeText,
-    jobDescription = ""
-  ) => {
 
-    try {
+const analyzeResumeWithAI = async (resumeText, jobDescription = "") => {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = atsPrompt(resumeText, jobDescription);
+    const result = await model.generateContent(prompt);
+    const text = result.response.text()
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
 
-      const model =
-        genAI.getGenerativeModel({
-          model: "gemini-1.5-flash",
-        });
+    const d = JSON.parse(text);
 
-      const prompt =
-        atsPrompt(
-          resumeText,
-          jobDescription
-        );
+    return {
+      atsScore:              d.atsScore              ?? 0,
+      keywordMatch:          d.keywordMatch          ?? 0,
+      formattingScore:       d.formattingScore       ?? 0,
+      readabilityScore:      d.readabilityScore      ?? 0,
+      technicalScore:        d.technicalScore        ?? 0,
+      recruiterConfidence:   d.recruiterConfidence   ?? 0,
+      scoreTitle:            d.scoreTitle            || "Analysis complete",
+      strengths:             d.strengths             || [],
+      weaknesses:            d.weaknesses            || [],
+      missingKeywords:       d.missingKeywords       || [],
+      matchedSkills:         d.matchedSkills         || [],
+      missingCriticalSkills: d.missingCriticalSkills || [],
+      formattingIssues:      d.formattingIssues      || [],
+      suggestions:           d.suggestions           || [],
+      improvedBulletPoints:  d.improvedBulletPoints  || [],
+      recruiterVerdict:      d.recruiterVerdict      || "",
+    };
+  } catch (err) {
+    //console.error("Gemini error:", err.message);
+    
+     console.error("FULL GEMINI ERROR:");
+      console.error(err);
 
-      const result =
-        await model.generateContent(
-          prompt
-        );
 
-      const response =
-        await result.response;
-
-      const text =
-        response.text();
-
-      const cleanedContent =
-        text
-          .replace(/```json/g, "")
-          .replace(/```/g, "")
-          .trim();
-
-      const parsedData =
-        JSON.parse(cleanedContent);
-
-      return {
-
-        atsScore:
-          parsedData.atsScore || 70,
-
-        keywordMatch:
-          parsedData.keywordMatch || 60,
-
-        strengths:
-          parsedData.strengths || [],
-
-        weaknesses:
-          parsedData.weaknesses || [],
-
-        missingKeywords:
-          parsedData.missingKeywords || [],
-
-        formattingIssues:
-          parsedData.formattingIssues || [],
-
-        suggestions:
-          parsedData.suggestions || [],
-
-        improvedBulletPoints:
-          parsedData.improvedBulletPoints || [],
-
-        recruiterVerdict:
-          parsedData.recruiterVerdict ||
-          "Resume analysis generated successfully.",
-
-        matchedSkills:
-          parsedData.matchedSkills || [],
-
-        missingCriticalSkills:
-          parsedData.missingCriticalSkills || [],
-
-        formattingScore:
-          parsedData.formattingScore || 75,
-
-        readabilityScore:
-          parsedData.readabilityScore || 75,
-
-        technicalScore:
-          parsedData.technicalScore || 75,
-
-        recruiterConfidence:
-          parsedData.recruiterConfidence || 75,
-      };
-
-    } catch (error) {
-
-      console.log(
-        "Gemini Error:",
-        error
-      );
-
-      return {
-
-        atsScore: 65,
-
-        keywordMatch: 55,
-
-        strengths: [
-          "Resume uploaded successfully",
-        ],
-
-        weaknesses: [
-          "AI analysis temporarily unavailable",
-        ],
-
-        missingKeywords: [
-          "Docker",
-          "AWS",
-        ],
-
-        formattingIssues: [
-          "Formatting can be improved",
-        ],
-
-        suggestions: [
-          "Improve ATS keyword optimization",
-        ],
-
-        improvedBulletPoints: [
-          "Built scalable full-stack web applications using MERN stack technologies.",
-        ],
-
-        recruiterVerdict:
-          "Resume shows technical potential but requires stronger ATS optimization and quantified achievements.",
-
-        matchedSkills: [
-          "React.js",
-          "Node.js",
-        ],
-
-        missingCriticalSkills: [
-          "Docker",
-          "CI/CD",
-        ],
-
-        formattingScore: 72,
-
-        readabilityScore: 75,
-
-        technicalScore: 78,
-
-        recruiterConfidence: 70,
-      };
-    }
-  };
+    return {
+      atsScore: 0, keywordMatch: 0, formattingScore: 0,
+      readabilityScore: 0, technicalScore: 0, recruiterConfidence: 0,
+      scoreTitle: "Analysis failed — please retry",
+      strengths: [], weaknesses: [], missingKeywords: [], matchedSkills: [],
+      missingCriticalSkills: [], formattingIssues: [], suggestions: [],
+      improvedBulletPoints: [],
+      recruiterVerdict: "AI analysis encountered an error. Please re-upload your resume.",
+    };
+  }
+};
 
 export default analyzeResumeWithAI;

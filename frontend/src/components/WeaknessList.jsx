@@ -1,70 +1,27 @@
-import { FaExclamationTriangle } from "react-icons/fa";
-
-function WeaknessList({
-  weaknesses,
-}) {
-
+function WeaknessList({ weaknesses }) {
   return (
-
-    <div className="bg-white border border-gray-100 rounded-3xl p-7 shadow hover:shadow-xl transition duration-300">
-
-      <div className="flex items-center gap-4 mb-6">
-
-        <div className="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center">
-
-          <FaExclamationTriangle className="text-red-500 text-2xl" />
-
-        </div>
-
+    <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm p-7">
+      <div className="flex items-center gap-3 mb-5">
+        <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg shrink-0">⚠️</div>
         <div>
-
-          <h3 className="text-2xl font-bold text-gray-900">
-
-            Resume Weaknesses
-
-          </h3>
-
-          <p className="text-gray-500 text-sm">
-
-            Critical ATS and recruiter concerns detected by AI
-
+          <h3 className="text-base font-bold text-gray-900 dark:text-white">Resume Weaknesses</h3>
+          <p className="text-xs text-gray-400">
+            {weaknesses?.length ? `${weaknesses.length} issue${weaknesses.length > 1 ? "s" : ""} — fix these to raise your score` : "Critical ATS and recruiter concerns"}
           </p>
-
         </div>
-
       </div>
-
-      <div className="space-y-4">
-
-        {weaknesses.map(
-          (item, index) => (
-
-            <div
-              key={index}
-              className="bg-red-50 border border-red-100 rounded-2xl p-4 hover:scale-[1.01] transition"
-            >
-
-              <div className="flex gap-3 items-start">
-
-                <FaExclamationTriangle className="text-red-500 mt-1" />
-
-                <p className="text-gray-700 leading-7">
-
-                  {item}
-
-                </p>
-
+      {!weaknesses?.length
+        ? <p className="text-sm text-gray-400 text-center py-6">No weaknesses detected.</p>
+        : <div className="space-y-3">
+            {weaknesses.map((item, i) => (
+              <div key={i} className="bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-700 rounded-xl p-4 flex gap-3 items-start">
+                <span className="text-xs font-bold text-red-500 bg-red-100 dark:bg-red-900 rounded-full w-6 h-6 flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{item}</p>
               </div>
-
-            </div>
-
-          )
-        )}
-
-      </div>
-
+            ))}
+          </div>
+      }
     </div>
   );
 }
-
 export default WeaknessList;

@@ -1,49 +1,32 @@
 import { Routes, Route } from "react-router-dom";
-
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import UploadResume from "./pages/UploadResume";
-import ATSResult from "./pages/ATSResult";
-import History from "./pages/History";
-
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import Home         from "./pages/Home";
+import Login        from "./pages/Login";
+import Register     from "./pages/Register";
+import UploadResume from "./pages/UploadResume";
+import ATSResult    from "./pages/ATSResult";
+import History      from "./pages/History";
+import CoverLetter  from "./pages/CoverLetter";
+import Admin        from "./pages/Admin";
+import Dashboard    from "./pages/Dashboard";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Navbar />
-
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/"          element={<Home />} />
+        <Route path="/login"     element={<Login />} />
+        <Route path="/register"  element={<Register />} />
 
-        <Route path="/login" element={<Login />} />
-
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
-
-        <Route
-          path="/upload"
-          element={<UploadResume />}
-        />
-
-        <Route
-          path="/result"
-          element={<ATSResult />}
-        />
-
-        <Route
-          path="/history"
-          element={<History />}
-        />
+        <Route path="/upload"    element={<ProtectedRoute><UploadResume /></ProtectedRoute>} />
+        <Route path="/result"    element={<ProtectedRoute><ATSResult /></ProtectedRoute>} />
+        <Route path="/history"   element={<ProtectedRoute><History /></ProtectedRoute>} />
+        <Route path="/cover-letter" element={<ProtectedRoute><CoverLetter /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/admin"     element={<ProtectedRoute><Admin /></ProtectedRoute>} />
       </Routes>
     </div>
   );
