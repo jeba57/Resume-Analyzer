@@ -8,7 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
 
 dotenv.config();
-console.log(process.env.GEMINI_API_KEY);
+//console.log(process.env.GEMINI_API_KEY);
 
 connectDB();
 

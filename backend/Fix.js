@@ -1,7 +1,20 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// Run this from your backend folder:
+// node fix.js
+//
+// This script automatically fixes geminiService.js in place.
+
+import { writeFileSync } from "fs";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const fixedGeminiService = `import { GoogleGenerativeAI } from "@google/generative-ai";
 import atsPrompt from "../utils/atsPrompt.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// gemini-2.0-flash confirmed available for this account
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 const analyzeResumeWithAI = async (resumeText, jobDescription = "") => {
@@ -10,10 +23,9 @@ const analyzeResumeWithAI = async (resumeText, jobDescription = "") => {
     console.log("Calling Gemini...");
     const result = await model.generateContent(prompt);
     const text = result.response.text();
-    console.log("Gemini responded");
-    const d = JSON.parse(
-      text.replace(/```json/g, "").replace(/```/g, "").trim()
-    );
+    console.log("Gemini responded, parsing...");
+    const cleaned = text.replace(/\`\`\`json/g, "").replace(/\`\`\`/g, "").trim();
+    const d = JSON.parse(cleaned);
     console.log("ATS Score:", d.atsScore);
     return {
       atsScore:              d.atsScore              ?? 0,
@@ -48,3 +60,9 @@ const analyzeResumeWithAI = async (resumeText, jobDescription = "") => {
 };
 
 export default analyzeResumeWithAI;
+`;
+
+const targetPath = path.join(__dirname, "services", "geminiService.js");
+writeFileSync(targetPath, fixedGeminiService, "utf8");
+console.log("✅ geminiService.js has been fixed!");
+console.log("   Now restart your backend: npm run dev");
