@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 
-// ✅ Restore saved dark/light mode on every page load
+//  Apply saved theme on every page load
 if (localStorage.getItem('theme') === 'dark') {
   document.documentElement.classList.add('dark')
 } else {

@@ -14,15 +14,14 @@ import Admin        from "./pages/Admin";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    // dark:bg-gray-900 makes the full page background go dark
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <Navbar />
       <Routes>
-        {/* Public */}
         <Route path="/"         element={<Home />} />
         <Route path="/login"    element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected */}
         <Route path="/upload"       element={<ProtectedRoute><UploadResume /></ProtectedRoute>} />
         <Route path="/result"       element={<ProtectedRoute><ATSResult /></ProtectedRoute>} />
         <Route path="/history"      element={<ProtectedRoute><History /></ProtectedRoute>} />

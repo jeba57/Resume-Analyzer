@@ -1,5 +1,6 @@
 import extractTextFromPDF from "../services/pdfService.js";
-import analyzeResumeWithAI from "../services/openaiService.js";
+import { scoreResume }    from "../services/atsEngine.js";
+import { enhanceWithAI }  from "../services/aiEnhancer.js";
 import Resume from "../models/Resume.js";
 import fs from "fs";
 
@@ -20,9 +21,17 @@ const uploadResume = async (req, res) => {
     }
 
     const jobDescription = req.body.jobDescription || "";
-    const analysis = await analyzeResumeWithAI(resumeText, jobDescription);
 
-    // Save to MongoDB so History page works
+    // ✅ Step 1: Local ATS scoring — always works, zero AI dependency
+    console.log("📊 Running local ATS engine...");
+    const localScores = scoreResume(resumeText, jobDescription);
+    console.log("✅ Local ATS Score:", localScores.atsScore);
+
+    // ✅ Step 2: AI enhancement — optional, adds bullet rewrites + verdict
+    // If AI fails, local scores are returned unchanged with generated verdict
+    const analysis = await enhanceWithAI(resumeText, localScores, jobDescription);
+
+    // ✅ Step 3: Save to MongoDB for history
     const resume = await Resume.create({
       user: req.user._id,
       filename: req.file.originalname || "resume.pdf",

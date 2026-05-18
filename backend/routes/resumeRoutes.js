@@ -1,8 +1,6 @@
 import express from "express";
 import upload from "../middleware/uploadMiddleware.js";
 import { uploadResume, getHistory, getResumeById } from "../controllers/resumeController.js";
-
-// ✅ FIXED: named import — matches authMiddleware.js export { protect, adminOnly }
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
