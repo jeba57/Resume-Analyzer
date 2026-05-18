@@ -1,0 +1,10 @@
+feat: migrate ATS system to OpenAI and implement hybrid local ATS engine
+
+* Migrated AI services from Gemini to OpenAI
+* Fixed environment variable and API integration issues
+* Implemented local ATS scoring engine with deterministic analysis
+* Improved resume upload and PDF extraction pipeline
+* Added AI fallback handling to prevent ATS failure on API errors
+* Fixed Tailwind v4 dark/light mode support
+* Improved frontend theme persistence and global dark background handling
+* Enhanced cover letter generation flow with OpenAI integration
