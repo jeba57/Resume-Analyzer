@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
-import coverLetterRoutes from "./routes/coverLetterRoutes.js";
+import coverLetterRoutes from "./routes/xyz.js";
 import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config(); //  standard dotenv — never prints API key
