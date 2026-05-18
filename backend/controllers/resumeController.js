@@ -1,5 +1,5 @@
 import extractTextFromPDF from "../services/pdfService.js";
-import analyzeResumeWithAI from "../services/geminiService.js";
+import analyzeResumeWithAI from "../services/openaiService.js";
 import Resume from "../models/Resume.js";
 import fs from "fs";
 

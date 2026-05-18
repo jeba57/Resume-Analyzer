@@ -40,9 +40,11 @@ function UploadResume() {
       formData.append("jobDescription", jobDescription);
 
       const { data } = await axios.post(
+        
         `${API_BASE}/api/resume/upload`, formData,
         { headers: { Authorization: `Bearer ${userInfo?.token}`, "Content-Type": "multipart/form-data" } }
       );
+       console.log(data);
 
       clearInterval(interval);
       navigate("/result", { state: { analysis: data.analysis, resumeId: data.resumeId } });

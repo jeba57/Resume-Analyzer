@@ -1,9 +1,11 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 import extractTextFromPDF from "../services/pdfService.js";
 import CoverLetter from "../models/CoverLetter.js";
 import fs from "fs";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 // POST /api/cover-letter/generate
 const generateCoverLetter = async (req, res) => {
@@ -43,9 +45,19 @@ RESUME:
 ${resumeText || "No resume provided — generate based on job description only"}
     `.trim();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const result = await model.generateContent(prompt);
-    const content = result.response.text().trim();
+   const response = await genAI.chat.completions.create({
+  model: "gpt-4o-mini",
+  messages: [
+    {
+      role: "user",
+      content: prompt,
+    },
+  ],
+  temperature: 0.7,
+});
+
+const content =
+  response.choices[0].message.content.trim();
 
     // Save to DB
     const letter = await CoverLetter.create({
