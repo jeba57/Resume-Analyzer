@@ -6,34 +6,34 @@ import fs from "fs";
 // POST /api/resume/upload
 const uploadResume = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded." });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded." });
+    }
 
     const resumeText = await extractTextFromPDF(req.file.path);
+    fs.unlink(req.file.path, () => {});
 
     if (!resumeText || resumeText.trim().length < 50) {
-      fs.unlink(req.file.path, () => {});
       return res.status(400).json({
-        message: "Could not extract text from the PDF. Please ensure it is a text-based PDF.",
+        message: "Could not extract text from this PDF. Please use a text-based PDF, not a scanned image.",
       });
     }
 
     const jobDescription = req.body.jobDescription || "";
     const analysis = await analyzeResumeWithAI(resumeText, jobDescription);
 
-    // Save to history
+    // Save to MongoDB so History page works
     const resume = await Resume.create({
       user: req.user._id,
-      filename: req.file.originalname,
+      filename: req.file.originalname || "resume.pdf",
       jobDescription,
       analysis,
     });
 
-    // Clean up uploaded file
-    fs.unlink(req.file.path, () => {});
-
     return res.status(200).json({ success: true, analysis, resumeId: resume._id });
-  } catch (err) {
-    console.error("Resume upload error:", err.message);
+
+  } catch (error) {
+    console.error("Resume upload error:", error.message);
     return res.status(500).json({ message: "Resume analysis failed. Please try again." });
   }
 };
@@ -43,10 +43,10 @@ const getHistory = async (req, res) => {
   try {
     const resumes = await Resume.find({ user: req.user._id })
       .sort({ createdAt: -1 })
-      .select("filename analysis.atsScore analysis.scoreTitle jobDescription createdAt");
+      .select("filename analysis.atsScore analysis.scoreTitle analysis.keywordMatch analysis.strengths analysis.missingKeywords createdAt");
     return res.status(200).json(resumes);
-  } catch (err) {
-    console.error("History error:", err.message);
+  } catch (error) {
+    console.error("History error:", error.message);
     return res.status(500).json({ message: "Failed to fetch history." });
   }
 };
@@ -57,8 +57,8 @@ const getResumeById = async (req, res) => {
     const resume = await Resume.findOne({ _id: req.params.id, user: req.user._id });
     if (!resume) return res.status(404).json({ message: "Resume not found." });
     return res.status(200).json(resume);
-  } catch (err) {
-    console.error("Get resume error:", err.message);
+  } catch (error) {
+    console.error("Get resume error:", error.message);
     return res.status(500).json({ message: "Failed to fetch resume." });
   }
 };

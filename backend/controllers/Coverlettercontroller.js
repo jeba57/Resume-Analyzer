@@ -43,7 +43,7 @@ RESUME:
 ${resumeText || "No resume provided — generate based on job description only"}
     `.trim();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     const result = await model.generateContent(prompt);
     const content = result.response.text().trim();
 
