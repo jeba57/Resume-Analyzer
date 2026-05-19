@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import UploadBox from "../components/UploadBox";
 import Loader from "../components/Loader";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import API_BASE from "../api.js";
 
 const LOADING_STEPS = [
   "Parsing resume structure…",

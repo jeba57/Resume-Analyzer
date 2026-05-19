@@ -4,7 +4,7 @@ import axios from "axios";
 import ResumeCard from "../components/ResumeCard";
 import Loader from "../components/Loader";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import API_BASE from "../api.js";
 
 function History() {
   const [resumes, setResumes] = useState([]);
