@@ -7,15 +7,13 @@ function Navbar() {
 
   const [dropOpen,   setDropOpen]   = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  //  Read actual DOM state so it stays in sync after page refresh
-  const [darkMode, setDarkMode] = useState(
+  const [darkMode,   setDarkMode]   = useState(
     () => document.documentElement.classList.contains("dark")
   );
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  // Close dropdown when clicking outside
+  // ✅ Close dropdown when clicking outside
   useEffect(() => {
     const handler = (e) => {
       if (dropRef.current && !dropRef.current.contains(e.target))
@@ -25,7 +23,7 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Fixed toggle: adds/removes class on <html> AND saves to localStorage
+  // ✅ Fixed dark mode toggle
   const toggleDark = () => {
     const isDark = document.documentElement.classList.contains("dark");
     if (isDark) {
@@ -40,9 +38,11 @@ function Navbar() {
     setDropOpen(false);
   };
 
+  // ✅ Logout clears storage and redirects
   const logout = () => {
     localStorage.removeItem("userInfo");
     setDropOpen(false);
+    setMobileOpen(false);
     navigate("/");
   };
 
@@ -62,19 +62,19 @@ function Navbar() {
       </Link>
 
       {/* CENTER NAV — desktop */}
-      <div className="hidden md:flex gap-8 items-center font-medium text-sm">
+      <div className="hidden md:flex gap-7 items-center font-medium text-sm">
         <NavLink to="/"             className={navCls}>Home</NavLink>
         <NavLink to="/upload"       className={navCls}>Analyze Resume</NavLink>
         <NavLink to="/cover-letter" className={navCls}>Cover Letter</NavLink>
         <NavLink to="/history"      className={navCls}>History</NavLink>
       </div>
 
-      {/* RIGHT SIDE — desktop */}
+      {/* RIGHT — desktop */}
       <div className="hidden md:flex items-center gap-4">
         {!userInfo ? (
           <>
             <NavLink to="/login"
-              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition text-sm">
+              className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">
               Sign In
             </NavLink>
             <Link to="/register"
@@ -84,9 +84,9 @@ function Navbar() {
           </>
         ) : (
           <div className="relative" ref={dropRef}>
-            {/* PROFILE BUTTON */}
+
+            {/* ✅ CLICK-BASED button — not hover */}
             <button
-              data-cy="profile-btn"
               onClick={() => setDropOpen(!dropOpen)}
               className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-3 py-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition"
             >
@@ -99,20 +99,17 @@ function Navbar() {
               <span className="text-gray-400 text-xs">{dropOpen ? "▲" : "▾"}</span>
             </button>
 
-            {/* DROPDOWN MENU */}
+            {/* ✅ CLICK-BASED DROPDOWN — visible when dropOpen is true */}
             {dropOpen && (
-              <div
-                data-cy="profile-dropdown"
-                className="absolute right-0 mt-3 w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl z-50 overflow-hidden"
-              >
+              <div className="absolute right-0 mt-3 w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl z-50 overflow-hidden">
+
                 {/* USER INFO */}
-                <div className="px-5 py-3 border-b border-gray-100 dark:border-gray-700">
-                  <p className="text-xs text-gray-400">Signed in as</p>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-white truncate">{userInfo.name}</p>
+                <div className="px-5 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                  <p className="text-xs text-gray-400 mb-0.5">Signed in as</p>
+                  <p className="text-sm font-bold text-gray-800 dark:text-white truncate">{userInfo.name}</p>
                   <p className="text-xs text-gray-400 truncate">{userInfo.email}</p>
                 </div>
 
-                {/* Dashboard — only in dropdown */}
                 <Link to="/dashboard" onClick={() => setDropOpen(false)}
                   className="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                   🏠 Dashboard
@@ -133,30 +130,30 @@ function Navbar() {
                   🖼️ Edit Profile Picture
                 </Link>
 
-                {/* DARK MODE TOGGLE */}
+                {/* DARK MODE */}
                 <button
-                  data-cy="dark-mode-toggle"
                   onClick={toggleDark}
                   className="w-full flex items-center gap-3 px-5 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition text-left"
                 >
                   {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
                 </button>
 
-                {/* ADMIN PANEL — always visible so recruiters can access */}
+                {/* ADMIN PANEL */}
                 <Link to="/admin" onClick={() => setDropOpen(false)}
-                  className="flex items-center gap-3 px-5 py-3 text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-gray-700 transition font-medium">
+                  className="flex items-center gap-3 px-5 py-3 text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-gray-700 transition font-semibold">
                   🛡️ Admin Panel
                 </Link>
 
+                {/* ✅ LOGOUT — always visible at the bottom */}
                 <div className="border-t border-gray-100 dark:border-gray-700">
                   <button
-                    data-cy="logout-btn"
                     onClick={logout}
-                    className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-gray-700 transition text-left"
+                    className="w-full flex items-center gap-3 px-5 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-gray-700 transition text-left"
                   >
                     🚪 Sign Out
                   </button>
                 </div>
+
               </div>
             )}
           </div>
@@ -165,7 +162,7 @@ function Navbar() {
 
       {/* MOBILE HAMBURGER */}
       <button
-        className="md:hidden text-gray-600 dark:text-gray-300 text-xl"
+        className="md:hidden text-gray-600 dark:text-gray-300 text-2xl"
         onClick={() => setMobileOpen(!mobileOpen)}
       >
         {mobileOpen ? "✕" : "☰"}
@@ -173,33 +170,38 @@ function Navbar() {
 
       {/* MOBILE MENU */}
       {mobileOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-6 py-4 flex flex-col gap-3 text-sm shadow-lg md:hidden z-40">
+        <div className="absolute top-16 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-6 py-5 flex flex-col gap-4 text-sm shadow-xl md:hidden z-40">
           <NavLink to="/"             className={navCls} onClick={() => setMobileOpen(false)}>Home</NavLink>
           <NavLink to="/upload"       className={navCls} onClick={() => setMobileOpen(false)}>Analyze Resume</NavLink>
           <NavLink to="/cover-letter" className={navCls} onClick={() => setMobileOpen(false)}>Cover Letter</NavLink>
           <NavLink to="/history"      className={navCls} onClick={() => setMobileOpen(false)}>History</NavLink>
-          {userInfo && (
+
+          {userInfo ? (
             <>
-              <NavLink to="/dashboard" className={navCls} onClick={() => setMobileOpen(false)}>Dashboard</NavLink>
-              <NavLink to="/admin"     className={navCls} onClick={() => setMobileOpen(false)}>🛡️ Admin Panel</NavLink>
-              <button onClick={() => { toggleDark(); setMobileOpen(false); }}
-                className="text-left text-gray-700 dark:text-gray-300 font-medium">
-                {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-              </button>
-              <button onClick={logout} className="text-left text-red-500 font-medium">Sign Out</button>
+              <div className="border-t border-gray-100 dark:border-gray-700 pt-3 space-y-3">
+                <p className="text-xs text-gray-400">Signed in as <strong className="text-gray-700 dark:text-gray-200">{userInfo.name}</strong></p>
+                <NavLink to="/dashboard"    className={navCls} onClick={() => setMobileOpen(false)}>🏠 Dashboard</NavLink>
+                <NavLink to="/admin"        className={navCls} onClick={() => setMobileOpen(false)}>🛡️ Admin Panel</NavLink>
+                <button onClick={toggleDark} className="text-left text-gray-700 dark:text-gray-300 font-medium w-full">
+                  {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                </button>
+                <button onClick={logout} className="text-left text-red-500 font-semibold w-full">
+                  🚪 Sign Out
+                </button>
+              </div>
             </>
-          )}
-          {!userInfo && (
-            <>
+          ) : (
+            <div className="border-t border-gray-100 dark:border-gray-700 pt-3 space-y-3">
               <NavLink to="/login"    className={navCls} onClick={() => setMobileOpen(false)}>Sign In</NavLink>
               <Link to="/register" onClick={() => setMobileOpen(false)}
-                className="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-center font-semibold">
+                className="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-center font-semibold block">
                 Get Started
               </Link>
-            </>
+            </div>
           )}
         </div>
       )}
+
     </nav>
   );
 }
