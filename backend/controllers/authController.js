@@ -16,14 +16,8 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists." });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      isAdmin: false,
-    });
+    // DO NOT hash password here — User.js pre("save") hook handles it
+    const user = await User.create({ name, email, password });
 
     return res.status(201).json({
       _id:     user._id,
@@ -51,7 +45,6 @@ export const loginUser = async (req, res) => {
         _id:     user._id,
         name:    user.name,
         email:   user.email,
-        //  isAdmin included so admin panel works after login
         isAdmin: user.isAdmin,
         token:   generateToken(user._id),
       });

@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // isAdmin field — was missing, causing admin panel to never work
     isAdmin: {
       type: Boolean,
       default: false,
@@ -32,16 +31,15 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash password before saving
+// Hash password before saving — only runs if password is modified
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
-// Compare entered password with hashed password
-userSchema.methods.matchPassword = 
-async function (enteredPassword) {
+// Compare entered password with stored hash
+userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
