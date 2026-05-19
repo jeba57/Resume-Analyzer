@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import UploadBox from "../components/UploadBox";
 import Loader from "../components/Loader";
-import API_BASE from "./Admin";
 
 import API_BASE from "../api.js";
 

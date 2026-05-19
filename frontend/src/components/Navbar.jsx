@@ -13,7 +13,7 @@ function Navbar() {
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  // ✅ Close dropdown when clicking outside
+  //  Close dropdown when clicking outside
   useEffect(() => {
     const handler = (e) => {
       if (dropRef.current && !dropRef.current.contains(e.target))
@@ -85,7 +85,7 @@ function Navbar() {
         ) : (
           <div className="relative" ref={dropRef}>
 
-            {/* ✅ CLICK-BASED button — not hover */}
+            {/* CLICK-BASED button — not hover */}
             <button
               onClick={() => setDropOpen(!dropOpen)}
               className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-3 py-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition"
@@ -99,9 +99,9 @@ function Navbar() {
               <span className="text-gray-400 text-xs">{dropOpen ? "▲" : "▾"}</span>
             </button>
 
-            {/* ✅ CLICK-BASED DROPDOWN — visible when dropOpen is true */}
+            {/* CLICK-BASED DROPDOWN — visible when dropOpen is true */}
             {dropOpen && (
-              <div className="absolute right-0 mt-3 w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl z-50 overflow-hidden">
+              <div className="absolute right-0 mt-3 w-60 max-h-[80vh] overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl z-50">
 
                 {/* USER INFO */}
                 <div className="px-5 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
@@ -144,7 +144,7 @@ function Navbar() {
                   🛡️ Admin Panel
                 </Link>
 
-                {/* ✅ LOGOUT — always visible at the bottom */}
+                {/*  LOGOUT — always visible at the bottom */}
                 <div className="border-t border-gray-100 dark:border-gray-700">
                   <button
                     onClick={logout}
