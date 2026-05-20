@@ -14,7 +14,7 @@
 
 ## 🌐 Live Demo
 
-🚀 Live Application:  ([click here](https://resume-analyzer-frontend-a7ud.onrender.com))
+🚀 Live Application:  ([click here](https://resume-analyzer-frontend-a7ud.onrender.com/))
 
 ```bash
 [URL](https://resume-analyzer-frontend-a7ud.onrender.com)
