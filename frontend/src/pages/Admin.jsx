@@ -67,6 +67,7 @@ function Admin() {
       setResumes(r.data);
     } catch (err) {
       if (err.response?.status === 403) {
+        console.log(err.response);
         setError("403");
       } else {
         setError(err.response?.data?.message || "Failed to load admin data.");
