@@ -11,6 +11,9 @@ import ATSResult    from "./pages/ATSResult";
 import History      from "./pages/History";
 import CoverLetter  from "./pages/CoverLetter";
 import Admin        from "./pages/Admin";
+import Settings from "./pages/Settings";
+import EditProfile from "./pages/EditProfile";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
   return (
@@ -27,7 +30,9 @@ function App() {
         <Route path="/history"      element={<ProtectedRoute><History /></ProtectedRoute>} />
         <Route path="/cover-letter" element={<ProtectedRoute><CoverLetter /></ProtectedRoute>} />
         <Route path="/dashboard"    element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/admin"        element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+        <Route path="/admin"        element={<AdminRoute><Admin /></AdminRoute>}/>
+        <Route path="/settings"     element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
       </Routes>
     </div>
   );

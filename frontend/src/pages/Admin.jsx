@@ -4,18 +4,38 @@ import axios from "axios";
 import Loader from "../components/Loader";
 import API_BASE from "../api.js";
 
-function StatCard({ label, value, color = "text-gray-900", icon }) {
+// ── CLICKABLE STAT CARD ───────────────────────────────────────
+function StatCard({ label, value, icon, color = "text-gray-900", onClick }) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 hover:-translate-y-1 hover:shadow-xl transition duration-300">
-      <p className="text-xs text-gray-400 font-medium mb-2 uppercase tracking-wider">{label}</p>
-      <div className="flex items-center gap-3">
+    <div
+      onClick={onClick}
+      className={`bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 hover:-translate-y-1 hover:shadow-xl transition duration-300 ${onClick ? "cursor-pointer hover:border-blue-200 dark:hover:border-blue-700" : ""}`}
+    >
+      <div className="flex items-start justify-between mb-3">
         <span className="text-2xl">{icon}</span>
-        <span className={`text-3xl font-bold ${color} dark:text-white`}>{value}</span>
+        {onClick && (
+          <span className="text-xs text-blue-500 dark:text-blue-400 font-medium">View →</span>
+        )}
       </div>
+      <p className={`text-3xl font-bold ${color} dark:text-white mb-1`}>{value}</p>
+      <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">{label}</p>
     </div>
   );
 }
 
+// ── TIMESTAMP FORMATTER ───────────────────────────────────────
+const formatDateTime = (dateStr) => {
+  const d = new Date(dateStr);
+  const date = d.toLocaleDateString("en-IN", {
+    day: "numeric", month: "short", year: "numeric",
+  });
+  const time = d.toLocaleTimeString("en-IN", {
+    hour: "2-digit", minute: "2-digit",
+  });
+  return `${date} · ${time}`;
+};
+
+// ── MAIN ADMIN PANEL ──────────────────────────────────────────
 function Admin() {
   const navigate  = useNavigate();
   const [stats,   setStats]   = useState(null);
@@ -28,11 +48,7 @@ function Admin() {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
-  // This was causing redirect to home for all non-admin users
-    if (!userInfo?.token) {
-      navigate("/");
-      return;
-    }
+    if (!userInfo?.token) { navigate("/login"); return; }
     fetchAll();
   }, []);
 
@@ -51,7 +67,7 @@ function Admin() {
       setResumes(r.data);
     } catch (err) {
       if (err.response?.status === 403) {
-        setError("403_FORBIDDEN");
+        setError("403");
       } else {
         setError(err.response?.data?.message || "Failed to load admin data.");
       }
@@ -63,9 +79,11 @@ function Admin() {
   const deleteUser = async (id) => {
     if (!window.confirm("Delete this user and all their data?")) return;
     try {
-      const headers = { Authorization: `Bearer ${userInfo.token}` };
-      await axios.delete(`${API_BASE}/api/admin/users/${id}`, { headers });
+      await axios.delete(`${API_BASE}/api/admin/users/${id}`, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
       setUsers(users.filter((u) => u._id !== id));
+      setStats((prev) => ({ ...prev, totalUsers: prev.totalUsers - 1 }));
     } catch (err) {
       alert(err.response?.data?.message || "Delete failed.");
     }
@@ -74,30 +92,26 @@ function Admin() {
   const scoreColor = (s) =>
     s >= 70 ? "text-green-600" : s >= 50 ? "text-amber-500" : "text-red-500";
 
-  // Show instructions if not admin
-  if (!loading && error === "403_FORBIDDEN") {
+  // 403 — not admin
+  if (!loading && error === "403") {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-10 max-w-lg w-full text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-10 max-w-md w-full text-center">
           <div className="text-5xl mb-4">🛡️</div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Admin Access Required
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Admin Access Required</h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-            Your account does not have admin privileges yet.
+            Your account does not have admin privileges.
           </p>
           <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 text-left text-sm space-y-2 mb-6">
-            <p className="font-semibold text-amber-800 dark:text-amber-300">How to enable admin access:</p>
-            <p className="text-amber-700 dark:text-amber-400">1. Go to <strong>MongoDB Atlas</strong> → Browse Collections → users</p>
-            <p className="text-amber-700 dark:text-amber-400">2. Find your account → click <strong>UPDATE</strong></p>
-            <p className="text-amber-700 dark:text-amber-400">3. Filter: <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded">{"{ \"email\": \"your@email.com\" }"}</code></p>
-            <p className="text-amber-700 dark:text-amber-400">4. Update: <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded">{"{ \"$set\": { \"isAdmin\": true } }"}</code></p>
+            <p className="font-semibold text-amber-800 dark:text-amber-300">To enable admin access:</p>
+            <p className="text-amber-700 dark:text-amber-400">1. MongoDB Atlas → Browse Collections → users</p>
+            <p className="text-amber-700 dark:text-amber-400">2. Click <strong>UPDATE</strong></p>
+            <p className="text-amber-700 dark:text-amber-400">3. Filter: <code className="bg-amber-100 px-1 rounded">{"{ \"email\": \"your@email.com\" }"}</code></p>
+            <p className="text-amber-700 dark:text-amber-400">4. Update: <code className="bg-amber-100 px-1 rounded">{"{ \"$set\": { \"isAdmin\": true } }"}</code></p>
             <p className="text-amber-700 dark:text-amber-400">5. Log out and log back in</p>
           </div>
-          <button
-            onClick={() => navigate("/")}
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-blue-700 transition"
-          >
+          <button onClick={() => navigate("/")}
+            className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-blue-700 transition">
             Go Home
           </button>
         </div>
@@ -106,7 +120,7 @@ function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-8">
 
         {/* HEADER */}
@@ -115,24 +129,22 @@ function Admin() {
             <div className="flex items-center gap-3 mb-1">
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Panel</h1>
               <span className="text-xs font-semibold bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-full border border-purple-200 dark:border-purple-700">
-                🛡️ Admin Access
+                🛡️ Admin
               </span>
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm">
               User management · Resume analytics · System overview
             </p>
           </div>
-          <button
-            onClick={fetchAll}
-            className="text-sm border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 px-4 py-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-          >
+          <button onClick={fetchAll}
+            className="text-sm border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 px-4 py-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition">
             🔄 Refresh
           </button>
         </div>
 
         {loading && <Loader message="Loading admin data…" />}
 
-        {error && error !== "403_FORBIDDEN" && (
+        {error && error !== "403" && (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-2xl p-5">
             <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
           </div>
@@ -140,12 +152,35 @@ function Admin() {
 
         {!loading && stats && (
           <>
-            {/* STATS */}
+            {/* ✅ CLICKABLE STAT CARDS */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <StatCard label="Total Users"    value={stats.totalUsers}        icon="👥" color="text-blue-600" />
-              <StatCard label="Total Analyses" value={stats.totalResumes}      icon="📄" color="text-green-600" />
-              <StatCard label="Cover Letters"  value={stats.totalLetters || 0} icon="✉️" color="text-purple-600" />
-              <StatCard label="Avg ATS Score"  value={`${stats.avgAtsScore}%`} icon="🎯" color="text-amber-500" />
+              <StatCard
+                label="Total Users"
+                value={stats.totalUsers}
+                icon="👥"
+                color="text-blue-600"
+                onClick={() => setTab("users")}
+              />
+              <StatCard
+                label="Resume Analyses"
+                value={stats.totalResumes}
+                icon="📄"
+                color="text-green-600"
+                onClick={() => setTab("resumes")}
+              />
+              <StatCard
+                label="Cover Letters"
+                value={stats.totalLetters || 0}
+                icon="✉️"
+                color="text-purple-600"
+                onClick={() => setTab("resumes")}
+              />
+              <StatCard
+                label="Avg ATS Score"
+                value={`${stats.avgAtsScore}%`}
+                icon="🎯"
+                color="text-amber-500"
+              />
             </div>
 
             {/* TABS */}
@@ -172,10 +207,8 @@ function Admin() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-600">
-                        {["Name", "Email", "Role", "Joined", "Actions"].map((h) => (
-                          <th key={h} className="text-left px-5 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            {h}
-                          </th>
+                        {["User", "Email", "Role", "Joined", "Actions"].map((h) => (
+                          <th key={h} className="text-left px-5 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{h}</th>
                         ))}
                       </tr>
                     </thead>
@@ -202,10 +235,9 @@ function Admin() {
                               {u.isAdmin ? "🛡️ Admin" : "User"}
                             </span>
                           </td>
+                          {/* ✅ Exact date + time */}
                           <td className="px-5 py-4 text-gray-500 dark:text-gray-400 text-xs">
-                            {new Date(u.createdAt).toLocaleDateString("en-IN", {
-                              day: "numeric", month: "short", year: "numeric",
-                            })}
+                            {formatDateTime(u.createdAt)}
                           </td>
                           <td className="px-5 py-4">
                             {!u.isAdmin ? (
@@ -232,10 +264,8 @@ function Admin() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-600">
-                        {["User", "Filename", "ATS Score", "Keywords", "Score Title", "Date"].map((h) => (
-                          <th key={h} className="text-left px-5 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            {h}
-                          </th>
+                        {["User", "Filename", "ATS Score", "Keywords", "Score Title", "Date & Time"].map((h) => (
+                          <th key={h} className="text-left px-5 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{h}</th>
                         ))}
                       </tr>
                     </thead>
@@ -264,10 +294,9 @@ function Admin() {
                           <td className="px-5 py-4 text-gray-500 dark:text-gray-400 text-xs max-w-[160px]">
                             <p className="truncate">{r.analysis?.scoreTitle || "—"}</p>
                           </td>
+                          {/* ✅ Exact date + time */}
                           <td className="px-5 py-4 text-gray-500 dark:text-gray-400 text-xs">
-                            {new Date(r.createdAt).toLocaleDateString("en-IN", {
-                              day: "numeric", month: "short", year: "numeric",
-                            })}
+                            {formatDateTime(r.createdAt)}
                           </td>
                         </tr>
                       ))}

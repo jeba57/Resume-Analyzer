@@ -51,7 +51,7 @@ function Navbar() {
       ? "text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400 pb-0.5 transition"
       : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition";
 
-  const initial = userInfo?.name?.charAt(0).toUpperCase() || "U";
+ 
 
   return (
     <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 md:px-10 py-4 flex justify-between items-center shadow-sm sticky top-0 z-50 transition-colors duration-300">
@@ -90,9 +90,14 @@ function Navbar() {
               onClick={() => setDropOpen(!dropOpen)}
               className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-3 py-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition"
             >
-              <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
-                {initial}
-              </div>
+             <img
+  src={
+  userInfo?.profilePicture ||
+  `https://api.dicebear.com/7.x/adventurer/svg?seed=${userInfo?.name}`
+}
+  alt="profile"
+  className="w-9 h-9 rounded-full object-cover border border-gray-200 shrink-0"
+/>
               <span className="font-medium text-sm text-gray-700 dark:text-gray-200 max-w-[110px] truncate">
                 {userInfo.name}
               </span>

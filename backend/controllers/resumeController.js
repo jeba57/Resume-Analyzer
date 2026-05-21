@@ -16,24 +16,20 @@ const uploadResume = async (req, res) => {
 
     if (!resumeText || resumeText.trim().length < 50) {
       return res.status(400).json({
-        message: "Could not extract text from this PDF. Please use a text-based PDF, not a scanned image.",
+        message: "Could not extract text from this PDF. Please use a text-based PDF.",
       });
     }
 
     const jobDescription = req.body.jobDescription || "";
 
-    // ✅ Step 1: Local ATS scoring — always works, zero AI dependency
     console.log("📊 Running local ATS engine...");
     const localScores = scoreResume(resumeText, jobDescription);
     console.log("✅ Local ATS Score:", localScores.atsScore);
 
-    // ✅ Step 2: AI enhancement — optional, adds bullet rewrites + verdict
-    // If AI fails, local scores are returned unchanged with generated verdict
     const analysis = await enhanceWithAI(resumeText, localScores, jobDescription);
 
-    // ✅ Step 3: Save to MongoDB for history
     const resume = await Resume.create({
-      user: req.user._id,
+      user:     req.user._id,
       filename: req.file.originalname || "resume.pdf",
       jobDescription,
       analysis,
@@ -72,4 +68,17 @@ const getResumeById = async (req, res) => {
   }
 };
 
-export { uploadResume, getHistory, getResumeById };
+// DELETE /api/resume/history/:id
+const deleteResume = async (req, res) => {
+  try {
+    const resume = await Resume.findOne({ _id: req.params.id, user: req.user._id });
+    if (!resume) return res.status(404).json({ message: "Resume not found." });
+    await Resume.findByIdAndDelete(req.params.id);
+    return res.status(200).json({ message: "Resume deleted." });
+  } catch (error) {
+    console.error("Delete resume error:", error.message);
+    return res.status(500).json({ message: "Failed to delete resume." });
+  }
+};
+
+export { uploadResume, getHistory, getResumeById, deleteResume };

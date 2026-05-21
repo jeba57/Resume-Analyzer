@@ -23,7 +23,7 @@ function Home() {
       <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 grid md:grid-cols-2 gap-16 items-center">
         <div>
           <span className="inline-block text-xs font-semibold uppercase tracking-widest text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full mb-5">
-            Powered by Gemini AI
+            Powered by Open AI
           </span>
           <h1 className="text-5xl font-bold text-gray-900 leading-tight mb-5">
             Get your resume<br />
@@ -141,20 +141,26 @@ function Home() {
       </div>
 
       {/* CTA */}
-      <div className="py-20 px-6">
-        <div className="max-w-3xl mx-auto bg-blue-600 rounded-3xl p-12 text-center text-white">
-          <h2 className="text-3xl font-bold mb-3">Ready to optimize your resume?</h2>
-          <p className="text-blue-100 text-base mb-7">
-            Get your ATS score, keyword analysis, and AI-powered improvements in under 30 seconds.
-          </p>
-          <Link
-            to="/upload"
-            className="bg-white text-blue-600 px-8 py-3.5 rounded-xl font-semibold text-sm hover:shadow-xl hover:scale-105 transition-all inline-block"
-          >
-            Analyze My Resume Free
-          </Link>
-        </div>
-      </div>
+      <div className="py-10 px-3">
+  <div className="max-w-xl mx-auto bg-blue-600/95 rounded-2xl px-7 py-5 text-center text-white shadow-md">
+
+    <h2 className="text-xl md:text-2xl font-semibold tracking-tight mb-2">
+      Ready to improve your resume?
+    </h2>
+
+    <p className="text-blue-80 text-sm leading-relaxed mb-5 max-w-md mx-auto">
+      Get ATS insights, keyword analysis, and AI-powered suggestions in seconds.
+    </p>
+
+    <Link
+      to="/upload"
+      className="inline-flex items-center justify-center bg-white text-blue-600 text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-blue-50 transition-all duration-200"
+    >
+      Analyze Resume
+    </Link>
+
+  </div>
+</div>
 
     </div>
   );

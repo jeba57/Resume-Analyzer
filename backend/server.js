@@ -1,7 +1,10 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import path from "path";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import { fileURLToPath } from "url";
 
 import connectDB from "./config/db.js";
@@ -10,7 +13,7 @@ import resumeRoutes from "./routes/resumeRoutes.js";
 import coverLetterRoutes from "./routes/coverLetterRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 
-dotenv.config();
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
@@ -35,6 +38,7 @@ app.use("/api/auth",  authRoutes);
 app.use("/api/resume",       resumeRoutes);
 app.use("/api/cover-letter", coverLetterRoutes);
 app.use("/api/admin",        adminRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Resume Analyzer API running " });
